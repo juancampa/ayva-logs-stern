@@ -1,0 +1,10 @@
+.env
+cache/
+lib/
+node_modules/
+set_env.bat
+ayva_cache
+certs/
+certs.prod/
+.DS_Store
+certbot.log

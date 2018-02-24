@@ -1,0 +1,38 @@
+<html>
+  <head>
+
+  </head>
+  <body>
+    Logs
+    <div id="out" style="font-family: Consolas, monaco, San Francisco, monospace; font-size: 11px">
+    </div>
+    <button style="position: fixed; top: 0px; right: 0px" onclick="window.socket.emit('reset')" >Reset</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://logs.ayva.io');
+      const outDiv = document.getElementById('out');
+      let snap = true;
+      function scrollToBottom() {
+        document.body.scrollTop = document.body.scrollHeight;
+      }
+      document.onkeypress = (e) => { if (e.code === 'Space') { scrollToBottom(); } }
+      document.onscroll = (e) => { console.log(e); }
+
+      socket.on('log', function (data) {
+        try {
+          outDiv.insertAdjacentHTML('beforeend', `<div>${data}</div>`);
+        } catch (e) {
+          outDiv.insertAdjacentHTML('beforeend', `(Failed to parse)`);
+        }
+
+        if (outDiv.childElementCount > 500) {
+          outDiv.firstChild.remove();
+        }
+
+        if (snap) {
+          scrollToBottom();
+        }
+      });
+    </script>
+  </body>
+</html>
